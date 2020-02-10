@@ -68,10 +68,9 @@ function user_aws {
 }
 
 function key_aws {
-  local -r key_us_east="/home/aim/s.litsevychkeys.pem"
-  local -r key_us_west="/home/aim/stepan-oregon.pem"
-  local -r key_europe="/home/aim/stepan-frankfurt.pem"
-  local -r key_garnitskiy="/home/aim/Downloads/main_admin_ohio.pem"
+  local -r key_us_east="~/path/to/key"
+  local -r key_us_west="~/path/to/key"
+  local -r key_europe="~/path/to/key"
 
 	for k in $key
 	do
@@ -88,16 +87,11 @@ function key_aws {
 			  key=$key_europe
 			  region=eu-central
 			  ;;
-			ga|garn|spotify|proxy )
-				key=$key_garnitskiy
-				region=us-east-2
-				;;
 		  *)
 			  log_warn "${nocolor}${red}Invalid region input, please choose:
 - for Us-East: [vV][virgVirg][useast][use][ohio][oO]
 - for Us-West: [wW][oregon][uswest][usw][cali]
-- for Eu-Central: [eE][fra][europe][eur]
-- for Proxy server of Andrey: [ga]\n${nocolor}"
+- for Eu-Central: [eE][fra][europe][eur]\n${nocolor}"
 				return 1
 			  ;;
 	  esac
