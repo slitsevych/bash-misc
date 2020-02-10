@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/bootstrap.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/log.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/colors.sh"
+
+function main {
+
+  local -r snap_packages=$(snap list --all | egrep "disabled" | awk {'print $1'})
+  local -r snap_revision=$(snap list --all | egrep "disabled" | awk {'print $3'})
+
+  if [[ -z "$snap_revision" ]] ; then
+    log_warn "${red}Could not find any disabled/outdated packages${nocolor}"
+    return 1
+  else
+    set $snap_revision
+  fi
+
+  for package in $snap_packages
+  do
+    log_info "${yellow}Snap package ${package} has outdated revision ${1} ${nocolor}"
+    read -p "Do you want to remove this package? [yes|no|yes-all] " answer
+    if [[ "$answer" =~ ^y(es)?$ ]] ; then
+      sudo snap remove ${package} --revision=${1}
+      log_info "${green}Revision ${package}:${1} has been purged${nocolor}"
+      sleep 1
+    elif [[ "$answer" =~ ^yes\-all$ ]] ; then
+      log_warn "Removing all disabled packages"
+      sudo snap list --all | awk '$6~"disabled"{print $1" --revision "$3}' | xargs -rn3 sudo snap remove
+      log_info "List of remaining packages: ${snap_packages} \n"
+      return 0
+    else
+      log_error "${red}Aborting operation, choose correct answer${nocolor}"
+    fi
+    shift
+  done
+}
+
+function status {
+  if [[ ${1} -eq 0 ]]; then
+    log_info "${green}Everything went well${nocolor}"
+  else
+    log_error "${red}Error executing script${nocolor}"
+  fi
+}
+
+main "$@"
+status $?

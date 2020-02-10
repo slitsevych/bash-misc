@@ -1,0 +1,8 @@
+#!/usr/bin/expect -f
+set timeout 1
+set pass [exec echo "c3RlcGFuMTIzCg==" | base64 --decode]
+spawn sudo su
+expect {\[sudo\] password for aim: }
+send "$pass\r"
+expect eof
+interact
