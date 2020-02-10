@@ -6,7 +6,7 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/colors.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/checks.sh"
 
 function expect_to_root {
-  local expect="/home/aim/root.exp"
+  local expect="/home/user/root.exp"
   if [[ -r ${expect} ]]; then
     /usr/bin/expect -f ${expect}
   else
