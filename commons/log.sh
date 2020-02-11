@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/colors.sh"
+
 # Log the given message at the given level. All logs are written to stderr with a timestamp.
 function log {
   local -r level="$1"
@@ -12,17 +14,17 @@ function log {
 # Log the given message at INFO level. All logs are written to stderr with a timestamp.
 function log_info {
   local -r message="$1"
-  log "INFO" "$message"
+  log "${green}INFO${nocolor}" "$message"
 }
 
 # Log the given message at WARN level. All logs are written to stderr with a timestamp.
 function log_warn {
   local -r message="$1"
-  log "WARN" "$message"
+  log "${yellow}WARN${nocolor}" "$message"
 }
 
 # Log the given message at ERROR level. All logs are written to stderr with a timestamp.
 function log_error {
   local -r message="$1"
-  log "ERROR" "$message"
+  log "${red}ERROR${nocolor}" "$message"
 }
