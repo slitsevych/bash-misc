@@ -7,3 +7,9 @@ A collection of miscellaneous bash scripts created by me for certain occasions:
 * snap-remove.sh - script removing disabled/outdated snap packages: either one by one or all at once
 * tfmodule-getopts.sh - script creating or deleting directory for Terraform module with basic files (main, outputs, variables)
 * tfmodule.sh - the same script as below but without additional getopts functionality
+
+`/commons` folder contains useful predefined functions which I've borrowed from the following repo: https://github.com/gruntwork-io/bash-commons
+
+When writing bash scripts I tend to comply with the following style guides/cheatsheets:
+* https://google.github.io/styleguide/shell.xml
+* https://devhints.io/bash
