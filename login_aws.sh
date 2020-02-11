@@ -14,7 +14,7 @@ function check_args {
   if [[ "$#" == 3 ]] && [[ "$user" != "default"  ]] && [[ "$address" != "default" ]] && [[ "$key" != "default" ]]; then
 		return 0
 	else
-		log_error "${nocolor}${red}Arguments have not been set, exiting\n${nocolor}"
+		log_error "${red}Arguments have not been set, exiting\n${nocolor}"
     return 1
 	fi
 }
@@ -24,7 +24,7 @@ function check_validity {
   if [[ "$host" =~ ^(([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))\.){3}([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))$ ]] || [[ "$host" =~ ^(.*)\.amazonaws\.com$ ]]; then
     return 0
   else
-    log_error "${nocolor}${red}Invalid IP address or hostname, please enter EC2 IPv4 Public IP or EC2 Public DNS\n${nocolor}"
+    log_error "${red}Invalid IP address or hostname, please enter EC2 IPv4 Public IP or EC2 Public DNS\n${nocolor}"
     return 1
   fi
 }
@@ -46,7 +46,7 @@ function user_aws {
 				user=ec2-user
 				;;
 			*)
-				log_warn "${nocolor}${red}Invalid operating system input, please choose between:
+				log_warn "${red}Invalid operating system input, please choose between:
 - for Ubuntu: u|ubuntu
 - for Centos: c|centos
 - for Debian: d|debian
@@ -78,7 +78,7 @@ function key_aws {
 			  region=eu-central
 			  ;;
 		  *)
-			  log_warn "${nocolor}${red}Invalid region input, please choose:
+			  log_warn "${red}Invalid region input, please choose:
 - for Us-East: [vV][virgVirg][useast][use][ohio][oO]
 - for Us-West: [wW][oregon][uswest][usw][cali]
 - for Eu-Central: [eE][fra][europe][eur]\n${nocolor}"

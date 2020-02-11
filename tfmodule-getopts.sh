@@ -10,11 +10,11 @@ function create_module {
   pwd="${PWD}"
 
   if ! [[ -z $module_name ]] ; then
-      log_info "${nocolor}${green}Values are set: creating empty `echo ${module_name}|tr a-z A-Z` module${nocolor}\n"
+      log_info "${green}Values are set: creating empty `echo ${module_name}|tr a-z A-Z` module${nocolor}\n"
     if ! [[ -d $module_name ]] ; then
       mkdir $module_name && cd "$_"
-      log_info "${nocolor}${green}Created folder for module ${module_name} in \"${pwd}/${module_name}${nocolor}\"\n" && sleep 1
-      log_info "${nocolor}${green}Creating empty files (main, output, variables) for module ${module_name}${nocolor}\n"
+      log_info "${green}Created folder for module ${module_name} in \"${pwd}/${module_name}${nocolor}\"\n" && sleep 1
+      log_info "${green}Creating empty files (main, output, variables) for module ${module_name}${nocolor}\n"
       touch {main,output,variables}.tf
       operation_result "creating necessary files"
     else
@@ -22,7 +22,7 @@ function create_module {
       exit 1
     fi
  else
-   log_error "${nocolor}${red}Please indicate module name (e.g: vpc)${nocolor}\n"
+   log_error "${red}Please indicate module name (e.g: vpc)${nocolor}\n"
    exit 1
  fi
 }
@@ -34,7 +34,7 @@ function delete_module {
 
   if [[ -d "$pwd/$module_name" ]] ; then
     rm -rfv "$pwd/$module_name"
-    operation_result "${nocolor}${green}deleting module ${module_name} in \"${pwd}/${module_name}${nocolor}\"\n"
+    operation_result "${green}deleting module ${module_name} in \"${pwd}/${module_name}${nocolor}\"\n"
   else
     log_warn "${yellow}There is no such module${nocolor}"
     exit 1
@@ -42,7 +42,7 @@ function delete_module {
 }
 
 function usage {
-  log_info "${magenta}Usage:${nocolor}${yellow} $0 [ -c|--create MODULE_NAME ] || [ -d|--delete MODULE_NAME ] || [ -h|--help ]${nocolor}"
+  log_info "${magenta}Usage:${yellow} $0 [ -c|--create MODULE_NAME ] || [ -d|--delete MODULE_NAME ] || [ -h|--help ]${nocolor}"
   exit 1;
 }
 
