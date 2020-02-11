@@ -9,10 +9,9 @@ function operation_result {
   local -r message="$1"
 
 	if ! [[ `echo $?` == 0 ]] ; then
-		log_error "${nocolor}${red}Found problem with ${green}${message}${nocolor}, exiting with error ${result}\n${nocolor}"
-    exit 1
+    log_error "${nocolor}${red}Found problem with ${green}${message}${nocolor}, exiting with error ${result}\n${nocolor}" && exit 1
 	else
-		log_info "${nocolor}${yellow}Everything is alright with ${green}${message}${nocolor}, proceeding further\n${nocolor}"
+    log_info "${nocolor}${yellow}Everything is alright with ${green}${message}${nocolor}, proceeding further\n${nocolor}"
 	fi
 }
 
