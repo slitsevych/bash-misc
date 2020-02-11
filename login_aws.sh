@@ -4,16 +4,7 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/bootstrap.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/log.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/colors.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/assert.sh"
-
-function operation_result {
-  local -r message="$1"
-
-	if ! [[ `echo $?` == 0 ]] ; then
-    log_error "${nocolor}${red}Found problem with ${green}${message}${nocolor}, exiting with error ${result}\n${nocolor}" && exit 1
-	else
-    log_info "${nocolor}${yellow}Everything is alright with ${green}${message}${nocolor}, proceeding further\n${nocolor}"
-	fi
-}
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/checks.sh"
 
 function check_args {
    user="${1:-default}"

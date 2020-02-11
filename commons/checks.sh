@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/colors.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/log.sh"
+
+function operation_result {
+  local -r message="$1"
+
+	if ! [[ `echo $?` == 0 ]] ; then
+    log_error "${nocolor}${red}Found problem with ${green}${message}${nocolor}, exiting with error ${?}\n${nocolor}" && exit 1
+	else
+    log_info "${nocolor}${yellow}Everything went well with ${green}${message}${nocolor}\n${nocolor}"
+	fi
+}
+
 # Returns a zero exit code if the given $username exists
 function os_user_exists {
   local -r username="$1"

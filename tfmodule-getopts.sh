@@ -2,16 +2,7 @@
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/log.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/colors.sh"
-
-function status {
-  if [[ `echo $?` == 0 ]]; then
-    log_info "${green}${1}${nocolor}"
-    exit 0
-  else
-    log_error "${red}Error executing operation${nocolor}"
-    exit 1
-  fi
-}
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/checks.sh"
 
 function create_module {
 
@@ -25,7 +16,7 @@ function create_module {
       log_info "${nocolor}${green}Created folder for module ${module_name} in \"${pwd}/${module_name}${nocolor}\"\n" && sleep 1
       log_info "${nocolor}${green}Creating empty files (main, output, variables) for module ${module_name}${nocolor}\n"
       touch {main,output,variables}.tf
-      status "Created necessary files"
+      operation_result "creating necessary files"
     else
       log_error "${red}Cannot create folder and files${nocolor}"
       exit 1
@@ -43,7 +34,7 @@ function delete_module {
 
   if [[ -d "$pwd/$module_name" ]] ; then
     rm -rfv "$pwd/$module_name"
-    status "${nocolor}${green}Deleted module ${module_name} in \"${pwd}/${module_name}${nocolor}\"\n"
+    operation_result "${nocolor}${green}deleting module ${module_name} in \"${pwd}/${module_name}${nocolor}\"\n"
   else
     log_warn "${yellow}There is no such module${nocolor}"
     exit 1

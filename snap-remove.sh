@@ -3,6 +3,7 @@
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/bootstrap.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/log.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/colors.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/checks.sh"
 
 function main {
 
@@ -36,13 +37,5 @@ function main {
   done
 }
 
-function status {
-  if [[ ${1} -eq 0 ]]; then
-    log_info "${green}Everything went well${nocolor}"
-  else
-    log_error "${red}Error executing script${nocolor}"
-  fi
-}
-
 main "$@"
-status $?
+operation_result "removing snap packages"

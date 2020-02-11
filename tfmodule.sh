@@ -2,15 +2,7 @@
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/log.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/colors.sh"
-
-function status {
-  if [[ `echo $?` == 0 ]]; then
-    log_info "${green}${1}${nocolor}"
-  else
-    log_error "${red}Error executing operation${nocolor}"
-    exit 1
-  fi
-}
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/checks.sh"
 
 function main {
 
@@ -29,7 +21,7 @@ function main {
 
   log_info "${nocolor}${green}Creating empty files (main, output, variables) for module ${module_name}${nocolor}\n"
   touch {main,output,variables}.tf
-  status "Created necessary files"
+  operation_result "creating necessary files"
 
  else
    log_error "${nocolor}${red}Please indicate module name (e.g: vpc)${nocolor}\n"
