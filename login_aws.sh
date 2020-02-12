@@ -94,8 +94,10 @@ function assert_region_key {
 
 function connect_ssh {
   local -r option="StrictHostKeyChecking=no"
+  local -r timeout="ConnectTimeout=7"
+
 	log_info "${yellow}Connecting to EC2 instance${nocolor} ${blue}'"$address"'${nocolor} in ${magenta}'"$aws_region"'${nocolor} with user ${green}'"$ssh_user"'${nocolor}\n"
-	ssh -i ${region_key} -o "${option}" ${ssh_user}@${address}
+	ssh -i ${region_key} -o "${no_strict}" -o "${timeout}" ${ssh_user}@${address}
 }
 
 function main {
