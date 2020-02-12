@@ -104,7 +104,7 @@ function main {
   echo -e "========================================="
   echo -e "|Checking arguments & validating address|"
   echo -e "========================================="
-  echo -e "${nocolor}\n"
+  echo -e "${nocolor}"
 
   verify_args "$@"
   operation_result "checking provided arguments"
@@ -116,10 +116,10 @@ function main {
   echo -e "======================="
   echo -e "|Verifying OS & region|"
   echo -e "======================="
-  echo -e "${nocolor}\n"
+  echo -e "${nocolor}"
 
   assert_ssh_user
-  operation_result "defining default ssh_user of OS"
+  operation_result "defining default ssh_user"
 
   assert_region_key
   operation_result "determining key pair for region"
@@ -128,7 +128,7 @@ function main {
   echo -e "==================="
   echo -e "|Connecting via SSH|"
   echo -e "==================="
-  echo -e "${nocolor}\n"
+  echo -e "${nocolor}"
 
   connect_ssh
 }
