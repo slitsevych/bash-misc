@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/bootstrap.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/bootstrap.sh" && set +e
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/log.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/colors.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/checks.sh"
@@ -12,7 +12,7 @@ function main {
 
   if [[ -z "$snap_revision" ]] ; then
     log_warn "${red}Could not find any disabled/outdated packages${nocolor}"
-    return 1
+    exit 1
   else
     set $snap_revision
   fi
@@ -26,12 +26,13 @@ function main {
       log_info "${green}Revision ${package}:${1} has been purged${nocolor}"
       sleep 1
     elif [[ "$answer" =~ ^yes\-all$ ]] ; then
-      log_warn "Removing all disabled packages"
+      log_warn "${yellow}Removing all disabled packages${nocolor}"
       sudo snap list --all | awk '$6~"disabled"{print $1" --revision "$3}' | xargs -rn3 sudo snap remove
-      log_info "List of remaining packages: ${snap_packages} \n"
+      log_info "${yellow}List of remaining packages: ${snap_packages} ${nocolor}\n"
       return 0
     else
       log_error "${red}Aborting operation, choose correct answer${nocolor}"
+      return 1
     fi
     shift
   done

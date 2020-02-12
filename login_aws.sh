@@ -1,20 +1,24 @@
 #!/usr/bin/env bash
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/bootstrap.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/bootstrap.sh" && set +e
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/log.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/colors.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/assert.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/checks.sh"
 
-function check_args {
-   user="${1:-default}"
-   address="${2:-default}"
-   key="${3:-default}"
+function usage {
+  log_info "${magenta}Usage:${yellow} ./${0##*/} \$1(ssh user) \$2(host address||server ip) \$3(region) ${nocolor}\n"
+}
 
-  if [[ "$#" == 3 ]] && [[ "$user" != "default"  ]] && [[ "$address" != "default" ]] && [[ "$key" != "default" ]]; then
+function check_args {
+   ssh_user="${1:-default}"
+   address="${2:-default}"
+   region="${3:-default}"
+
+  if [[ "$#" == 3 ]] && [[ "$ssh_user" != "default"  ]] && [[ "$address" != "default" ]] && [[ "$region" != "default" ]]; then
 		return 0
 	else
-		log_error "${red}Arguments have not been set, exiting\n${nocolor}"
+		log_error "${red}Arguments have not been set, check usage${nocolor}\n" && usage
     return 1
 	fi
 }
@@ -30,20 +34,20 @@ function check_validity {
 }
 
 function user_aws {
-	for x in $user
+	for user in $ssh_user
 	do
-		case "$x" in
+		case "$user" in
 			u|ubuntu|ub )
-				user=ubuntu
+				ssh_user=ubuntu
 				;;
 			d|debian|deb )
-				user=admin
+				ssh_user=admin
 				;;
 			c|centos|cent )
-				user=centos
+				ssh_user=centos
 				;;
 			a|amazon|ec2 )
-				user=ec2-user
+				ssh_user=ec2-user
 				;;
 			*)
 				log_warn "${red}Invalid operating system input, please choose between:
@@ -62,20 +66,20 @@ function key_aws {
   local -r key_us_west="~/path/to/key"
   local -r key_europe="~/path/to/key"
 
-	for k in $key
+	for key in $region
 	do
-		case "$k" in
+		case "$key" in
 		  v|V|virg|Virg|useast|use|ohio|o|O )
-			  key=$key_us_east
-			  region=us-east
+			  region_key=$key_us_east
+			  aws_region=us-east
 			  ;;
 		  w|W|oregon|uswest|usw|cali )
-		    key=$key_us_west
-			  region=us-west
+		    region_key=$key_us_west
+			  aws_region=us-west
 			  ;;
 		  e|E|fra|europe|eur )
-			  key=$key_europe
-			  region=eu-central
+			  region_key=$key_europe
+			  aws_region=eu-central
 			  ;;
 		  *)
 			  log_warn "${red}Invalid region input, please choose:
@@ -90,8 +94,8 @@ function key_aws {
 
 function ssh_aws {
   local -r option="StrictHostKeyChecking=no"
-	log_info "${yellow}Connecting to EC2 instance${nocolor} ${blue}'"$address"'${nocolor} in ${magenta}'"$region"'${nocolor} with user ${green}'"$user"'${nocolor}\n"
-	ssh -i ${key} -o "${option}" ${user}@${address}
+	log_info "${yellow}Connecting to EC2 instance${nocolor} ${blue}'"$address"'${nocolor} in ${magenta}'"$aws_region"'${nocolor} with user ${green}'"$ssh_user"'${nocolor}\n"
+	ssh -i ${region_key} -o "${option}" ${ssh_user}@${address}
 }
 
 function main {

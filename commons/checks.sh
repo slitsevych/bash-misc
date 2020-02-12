@@ -4,10 +4,11 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/colors.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/log.sh"
 
 function operation_result {
+  exit_code=$?
   local -r message="$1"
 
-	if ! [[ `echo $?` == 0 ]] ; then
-    log_error "${nocolor}${red}Found problem with ${green}${message}${nocolor}, exiting with error ${?}\n${nocolor}" && exit 1
+	if ! [[ ${exit_code} == 0 ]] ; then
+    log_error "${nocolor}${red}Found problem with ${green}${message}${nocolor}, exiting with error ${exit_code}\n${nocolor}" && exit 1
 	else
     log_info "${nocolor}${yellow}Everything went well with ${green}${message}${nocolor}\n${nocolor}"
 	fi
