@@ -50,11 +50,11 @@ function user_aws {
 				ssh_user=ec2-user
 				;;
 			*)
-				log_warn "${red}Invalid operating system input, please choose between:
-- for Ubuntu: u|ubuntu
-- for Centos: c|centos
-- for Debian: d|debian
-- for Amazon Linux: a|amazon|ec2\n${nocolor}"
+      log_warn "${nocolor}${red}Invalid operating system input, please choose between:
+- for Ubuntu: u|ubuntu|ub
+- for Centos: c|centos|cent
+- for Debian: d|debian|deb
+- for Amazon Linux: a|amazon|ec2 \n${nocolor}"
 				return 1
 				;;
 		esac
@@ -69,24 +69,24 @@ function key_aws {
 	for key in $region
 	do
 		case "$key" in
-		  v|V|virg|Virg|useast|use|ohio|o|O )
+		  v|virg|virginia|us-east|useast|us-east-1|us-east-2|east|o|oh|ohio )
 			  region_key=$key_us_east
 			  aws_region=us-east
 			  ;;
-		  w|W|oregon|uswest|usw|cali )
+		  w|west|ore|oregon|us-west|uswest|us-west-1|us-west-2|cali|california )
 		    region_key=$key_us_west
 			  aws_region=us-west
 			  ;;
-		  e|E|fra|europe|eur )
+		  e|eur|europe|germany|frankfurt|fra|eucentral|eu-central-1 )
 			  region_key=$key_europe
 			  aws_region=eu-central
 			  ;;
 		  *)
-			  log_warn "${red}Invalid region input, please choose:
-- for Us-East: [vV][virgVirg][useast][use][ohio][oO]
-- for Us-West: [wW][oregon][uswest][usw][cali]
-- for Eu-Central: [eE][fra][europe][eur]\n${nocolor}"
-				return 1
+        log_warn "${nocolor}${red}Invalid region input, please choose:
+- for Us-East: v|virg|virginia|us-east|useast|us-east-1|us-east-2|east|o|oh|ohio
+- for Us-West: w|west|ore|oregon|us-west|uswest|us-west-1|us-west-2|cali|california
+- for Eu-Central: e|eur|europe|germany|frankfurt|fra|eucentral|eu-central-1 \n${nocolor}"
+        return 1
 			  ;;
 	  esac
 	done
@@ -100,29 +100,35 @@ function ssh_aws {
 
 function main {
 
-  echo -e "${magenta}======================="
-  echo -e "|Checking Dependencies|"
-  echo -e "=======================\n${nocolor}"
+  echo -e "${magenta}"
+  echo -e "========================================="
+  echo -e "|Checking arguments & validating address|"
+  echo -e "========================================="
+  echo -e "${nocolor}\n"
 
   check_args "$@"
-  operation_result "checking dependencies"
+  operation_result "checking provided arguments"
 
   check_validity
-  operation_result "checking validity of host's IP address or hostname"
+  operation_result "validating provided host's server IP or hostname"
 
-  echo -e "${magenta}================================"
-  echo -e "|Verifying user and key location|"
-  echo -e "================================\n${nocolor}"
+  echo -e "${magenta}"
+  echo -e "======================="
+  echo -e "|Verifying OS & region|"
+  echo -e "======================="
+  echo -e "${nocolor}\n"
 
   user_aws
-  operation_result "defining operating system"
+  operation_result "defining default ssh_user of OS"
 
   key_aws
-  operation_result "choosing region"
+  operation_result "determining key pair for region"
 
-  echo -e "${magenta}============"
-  echo -e "|Logging in|"
-  echo -e "============\n${nocolor}"
+  echo -e "${magenta}"
+  echo -e "==================="
+  echo -e "|Connecting via SSH|"
+  echo -e "==================="
+  echo -e "${nocolor}\n"
 
   ssh_aws
 }
