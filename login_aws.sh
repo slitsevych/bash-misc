@@ -10,7 +10,7 @@ function usage {
   log_info "${magenta}Usage:${yellow} ./${0##*/} \$1(ssh user) \$2(host address||server ip) \$3(region) ${nocolor}\n"
 }
 
-function check_args {
+function verify_args {
    ssh_user="${1:-default}"
    address="${2:-default}"
    region="${3:-default}"
@@ -23,7 +23,7 @@ function check_args {
 	fi
 }
 
-function check_validity {
+function is_address_valid {
   local -r host=$address
   if [[ "$host" =~ ^(([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))\.){3}([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))$ ]] || [[ "$host" =~ ^(.*)\.amazonaws\.com$ ]]; then
     return 0
@@ -33,7 +33,7 @@ function check_validity {
   fi
 }
 
-function user_aws {
+function assert_ssh_user {
 	for user in $ssh_user
 	do
 		case "$user" in
@@ -61,7 +61,7 @@ function user_aws {
 	done
 }
 
-function key_aws {
+function assert_region_key {
   local -r key_us_east="~/path/to/key"
   local -r key_us_west="~/path/to/key"
   local -r key_europe="~/path/to/key"
@@ -92,7 +92,7 @@ function key_aws {
 	done
 }
 
-function ssh_aws {
+function connect_ssh {
   local -r option="StrictHostKeyChecking=no"
 	log_info "${yellow}Connecting to EC2 instance${nocolor} ${blue}'"$address"'${nocolor} in ${magenta}'"$aws_region"'${nocolor} with user ${green}'"$ssh_user"'${nocolor}\n"
 	ssh -i ${region_key} -o "${option}" ${ssh_user}@${address}
@@ -106,10 +106,10 @@ function main {
   echo -e "========================================="
   echo -e "${nocolor}\n"
 
-  check_args "$@"
+  verify_args "$@"
   operation_result "checking provided arguments"
 
-  check_validity
+  is_address_valid
   operation_result "validating provided host's server IP or hostname"
 
   echo -e "${magenta}"
@@ -118,10 +118,10 @@ function main {
   echo -e "======================="
   echo -e "${nocolor}\n"
 
-  user_aws
+  assert_ssh_user
   operation_result "defining default ssh_user of OS"
 
-  key_aws
+  assert_region_key
   operation_result "determining key pair for region"
 
   echo -e "${magenta}"
@@ -130,7 +130,7 @@ function main {
   echo -e "==================="
   echo -e "${nocolor}\n"
 
-  ssh_aws
+  connect_ssh
 }
 
 main "$@"
