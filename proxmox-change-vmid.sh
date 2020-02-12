@@ -2,7 +2,6 @@
 
 set -o errtrace
 set -o functrace
-set -o errexit
 set -o nounset
 set -o pipefail
 
@@ -39,10 +38,13 @@ function log_error {
 }
 
 function status {
-  if [[ `echo $?` == 0 ]] ; then
-    log_info "${magenta}All went well with ${1}${nocolor}\n"
+  exit_code=$?
+  local -r message="$1"
+
+  if ! [[ ${exit_code} == 0 ]] ; then
+    log_info "${magenta}All went well with ${message}${nocolor}\n"
   else
-    log_error "${red}Error executing script${nocolor}\n"
+    log_error "${red}Error: cannot complete ${message}${nocolor}\n"
   fi
 }
 
@@ -56,17 +58,16 @@ function vm_status {
   log_info "${magenta}Checking VM status${nocolor}"
   if [[ ! -f /etc/pve/nodes/proxmox/qemu-server/${ORIGINAL_ID}.conf ]] ; then
     log_error "${red}VM does not exist${nocolor}"
-    exit 1
+    return 1
+    if [[ -f /etc/pve/nodes/proxmox/qemu-server/${NEW_ID}.conf ]] ; then
+      log_error "${red}It looks that new ID is already in use, please choose another one${nocolor}"
+      return 1
+    fi
   elif [[ "$STATUS" == 1 ]] ; then
     log_info "${green}VM exists and it is stopped, proceeding${nocolor}"
   else
     log_warn "${yellow}VM is running, stopping it${nocolor}"
     qm stop ${ORIGINAL_ID} ; sleep 5
-  fi
-
-  if [[ -f /etc/pve/nodes/proxmox/qemu-server/${NEW_ID}.conf ]] ; then
-    log_error "${red}It looks that new ID is already in use, please choose another one${nocolor}"
-    exit 1
   fi
 }
 
