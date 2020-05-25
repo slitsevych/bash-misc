@@ -6,7 +6,6 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/colors.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/checks.sh"
 
 function main {
-
   local -r snap_packages=$(snap list --all | egrep "disabled" | awk {'print $1'})
   local -r snap_revision=$(snap list --all | egrep "disabled" | awk {'print $3'})
 

@@ -52,7 +52,6 @@ read -p "Enter current VM ID: " ORIGINAL_ID
 read -p "Enter new VM ID: " NEW_ID
 
 function vm_status {
-
   local -r STATUS=$(qm status ${ORIGINAL_ID} | grep "stopped" | wc -l 2>/dev/null)
 
   log_info "${magenta}Checking VM status${nocolor}"

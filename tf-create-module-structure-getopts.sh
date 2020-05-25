@@ -5,7 +5,6 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/colors.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/checks.sh"
 
 function create_module {
-
   module_name="${1}"
   pwd="${PWD}"
 
@@ -28,7 +27,6 @@ function create_module {
 }
 
 function delete_module {
-
   module_name="${1}"
   pwd="${PWD}"
 
@@ -47,7 +45,6 @@ function usage {
 }
 
 function main {
-
   if [[ -z $* ]] ; then
 	   log_error "${red}No options found!${nocolor}"
 	   exit 1

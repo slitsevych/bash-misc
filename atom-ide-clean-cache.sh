@@ -6,7 +6,6 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/colors.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/commons/checks.sh"
 
 function main {
-
   local -r STORAGE="$HOME/.atom/storage"
   local -r CACHE="$HOME/.atom/compile-cache"
   local -r INDEXDB="$HOME/.config/Atom/IndexedDB"
